@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Vision AI</title>
+<style>
+:root{--bg:#f1f7f5;--fg:#0d2420;--mut:#45615b;--card:#fff;--bd:#bfd6cf;--ac:#0b6b5c;--acf:#fff;--gold:#b45f00;--em:#c62828;--emf:#fff;--c1:#d8f0ea;--c2:#fde9cc;--c3:#e1e6fb;--c4:#fbe0e6;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#08171a;--fg:#e9f6f2;--mut:#9fbdb5;--card:#102529;--bd:#264a4a;--ac:#5fd3b8;--acf:#06201b;--gold:#ffc83d;--em:#ff6b6b;--emf:#1a0505;--c1:#123a36;--c2:#3d2d0f;--c3:#1b2450;--c4:#45202a;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#08171a;--fg:#e9f6f2;--mut:#9fbdb5;--card:#102529;--bd:#264a4a;--ac:#5fd3b8;--acf:#06201b;--gold:#ffc83d;--em:#ff6b6b;--emf:#1a0505;--c1:#123a36;--c2:#3d2d0f;--c3:#1b2450;--c4:#45202a;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px);font-size:calc(100% * var(--s,1))}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:1.05rem/1.55 "Noto Sans Devanagari","Noto Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding:0 0 84px}
+main{max-width:720px;margin:0 auto;padding:0 16px 24px}main:focus{outline:none}
+:focus-visible{outline:4px solid var(--gold);outline-offset:2px}
+.bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:12px 0}
+.bar .sp{flex:1}
+button,select,input,textarea,.btn{font:inherit;color:inherit}
+button,.btn{min-height:52px;padding:10px 18px;border-radius:14px;border:2px solid var(--ac);background:var(--card);cursor:pointer;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+button.p,.btn.p{background:var(--ac);color:var(--acf)}
+button.e,.btn.e{background:var(--em);border-color:var(--em);color:var(--emf)}
+select,input,textarea{width:100%;min-height:52px;padding:10px 12px;border-radius:12px;border:2px solid var(--bd);background:var(--card)}
+.bar select{width:auto}
+h1{font-size:2.6rem;line-height:1.05;margin:12px 0 6px;letter-spacing:-.02em}
+h2{font-size:1.6rem;margin:6px 0 10px}
+h3{font-size:1.15rem;margin:14px 0 4px}
+.tag{font-weight:700;color:var(--ac);margin:0}
+.mut{color:var(--mut)}
+.grid{display:grid;gap:14px;margin:18px 0}
+@media(min-width:560px){.grid{grid-template-columns:1fr 1fr}}
+.mode{min-height:150px;flex-direction:column;align-items:flex-start;text-align:left;justify-content:flex-end;border-width:3px;padding:16px;font-size:1.25rem}
+.mode span{font-weight:400;font-size:1rem;color:var(--mut)}
+.mode i{font-style:normal;font-size:2.6rem;line-height:1}
+.m1{background:var(--c1)}.m2{background:var(--c2)}.m3{background:var(--c3)}.m4{background:var(--c4)}
+.box{background:var(--card);border:2px solid var(--bd);border-radius:16px;padding:14px 16px;margin:12px 0}
+.cap{font-size:2rem;line-height:1.3;min-height:9rem;background:var(--card);border:2px solid var(--bd);border-radius:16px;padding:14px;white-space:pre-wrap}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}
+.chips button{border-radius:999px}
+.aac{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px}
+.aac button{flex-direction:column;min-height:96px}
+.aac i{font-style:normal;font-size:2rem}
+.sos{position:fixed;left:0;right:0;bottom:0;padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));background:var(--bg);border-top:2px solid var(--bd);z-index:5}
+.sos button{width:100%;max-width:720px;margin:0 auto;display:flex;min-height:58px;font-size:1.15rem}
+.warn{border-left:6px solid var(--gold)}
+.urgent{border-left:6px solid var(--em)}
+.ov{position:fixed;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;text-align:center;padding:24px;font-size:2.6rem;font-weight:800;background:var(--em);color:var(--emf);animation:bl 1s steps(1) infinite}
+@keyframes bl{50%{background:var(--bg);color:var(--fg)}}
+@media(prefers-reduced-motion:reduce){.ov{animation:none}}
+label{display:block;font-weight:600;margin:10px 0 4px}
+video,canvas{width:100%;border-radius:14px;background:#000}
+details summary{cursor:pointer;font-weight:700;min-height:44px}
+:root[data-cb="1"]{--ac:#0072b2;--acf:#fff;--gold:#b35a00;--em:#b34700;--emf:#fff;--c1:#d6eaf8;--c2:#fcebb8;--c3:#f3dceb;--c4:#cdefe6}
+@media(prefers-color-scheme:dark){:root[data-cb="1"]:not([data-theme="light"]){--ac:#56b4e9;--acf:#06121c;--gold:#f0e442;--em:#ff8a4c;--emf:#1a0a00;--c1:#12354d;--c2:#4a3a0a;--c3:#4a2340;--c4:#0f4a3f}}
+:root[data-cb="1"][data-theme="dark"]{--ac:#56b4e9;--acf:#06121c;--gold:#f0e442;--em:#ff8a4c;--emf:#1a0a00;--c1:#12354d;--c2:#4a3a0a;--c3:#4a2340;--c4:#0f4a3f}
+[data-cb="1"] .m2{border-style:dashed}[data-cb="1"] .m3{border-style:dotted}[data-cb="1"] .m4{border-style:double;border-width:6px}
+[data-cb="1"] .urgent{border-left-style:double;border-left-width:10px}
+button[aria-pressed="true"]{background:var(--ac);color:var(--acf)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--card)}
+.hd{position:sticky;top:env(safe-area-inset-top,0px);z-index:11;background:var(--card);border-bottom:2px solid var(--bd)}
+.hd-in{max-width:1100px;margin:0 auto;padding:8px 16px;display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--fg);min-height:48px;border-radius:10px}
+.hd .logo{flex:1 1 auto}
+.logo svg{width:40px;height:40px;flex:none}
+.logo b{display:block;font-size:1.2rem;letter-spacing:.02em;line-height:1.15}
+.logo small{display:block;font-size:.82rem;color:var(--mut);line-height:1.25}
+.hd nav{order:3;flex:1 1 100%;display:flex;flex-wrap:wrap;gap:4px}
+@media(min-width:900px){.hd nav{order:0;flex:1 1 auto;justify-content:center}.hd .logo{flex:0 0 auto}}
+.hd nav a,.ft nav a{color:var(--fg);text-decoration:none;padding:8px 12px;min-height:44px;display:inline-flex;align-items:center;border-radius:10px;font-weight:600}
+.hd nav a:hover,.ft nav a:hover{text-decoration:underline;text-underline-offset:4px}
+.hd nav a[aria-current="page"]{background:var(--ac);color:var(--acf)}
+.ctl{display:flex;gap:8px;align-items:center}
+.ctl select{width:auto;min-height:44px}.ctl button{min-height:44px;padding:6px 12px}
+.skip{position:absolute;left:-9999px;top:0;z-index:30;background:var(--ac);color:var(--acf);padding:12px 16px;border-radius:0 0 10px 0;font-weight:700}
+.skip:focus{left:0;top:env(safe-area-inset-top,0px)}
+.ft{background:var(--card);border-top:2px solid var(--bd);margin-top:28px;color:var(--fg)}
+.ft-in{max-width:1100px;margin:0 auto;padding:24px 16px;display:grid;gap:18px}
+@media(min-width:700px){.ft-in{grid-template-columns:1fr 1.3fr}}
+.ft ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:2px 6px}
+.ft p{margin:6px 0}
+.ft .cp{grid-column:1/-1;border-top:1px solid var(--bd);padding-top:14px;color:var(--mut);margin:0}
+
+</style>
+</head>
+<body>
+<a class="skip" href="#app" data-a="skip">Skip to main content</a>
+<header class="hd" id="hdr"></header>
+<main id="app" tabindex="-1"></main>
+<footer class="ft" id="ftr"></footer>
+<div class="sos" id="sosbar"><button class="e" data-a="go" data-v="emerg">🆘 <span id="sost"></span></button></div>
+<div id="ovl"></div>
+<div id="pg" class="sr" aria-live="polite"></div>
+<script>
+"use strict";
+const T={
+en:{tag:"One Platform. Every Ability. No Communication Barriers.",brand:"See • Hear • Speak • Understand",mission:"No one’s disability, language or literacy level should become a barrier to communication.",vision:"Vision Mode",vs:"See with AI",hear:"Hearing Mode",hs:"Convert sounds into text",comm:"Communication Mode",cs:"Communicate without barriers",health:"Health Companion",hls:"Understand your health",emerg:"Emergency Help",es:"Get assistance quickly",back:"Back",lang:"Language"},
+hi:{tag:"एक मंच। हर क्षमता। संवाद में कोई बाधा नहीं।",brand:"देखें • सुनें • बोलें • समझें",mission:"किसी की विकलांगता, भाषा या साक्षरता संवाद में बाधा न बने।",vision:"दृष्टि मोड",vs:"AI से देखें",hear:"श्रवण मोड",hs:"आवाज़ को टेक्स्ट में बदलें",comm:"संवाद मोड",cs:"बिना बाधा के बात करें",health:"स्वास्थ्य साथी",hls:"अपनी सेहत समझें",emerg:"आपातकालीन मदद",es:"तुरंत सहायता",back:"वापस",lang:"भाषा"},
+bn:{tag:"একটি প্ল্যাটফর্ম। প্রতিটি সক্ষমতা। যোগাযোগে কোনো বাধা নয়।",brand:"দেখুন • শুনুন • বলুন • বুঝুন",mission:"কারও অক্ষমতা, ভাষা বা সাক্ষরতার স্তর যেন যোগাযোগে বাধা না হয়।",vision:"দৃষ্টি মোড",vs:"AI দিয়ে দেখুন",hear:"শ্রবণ মোড",hs:"শব্দকে লেখায় রূপান্তর করুন",comm:"যোগাযোগ মোড",cs:"বাধাহীনভাবে কথা বলুন",health:"স্বাস্থ্য সহায়ক",hls:"আপনার স্বাস্থ্য বুঝুন",emerg:"জরুরি সাহায্য",es:"দ্রুত সহায়তা নিন",back:"পিছনে",lang:"ভাষা"},
+mr:{tag:"एक मंच. प्रत्येक क्षमता. संवादात कोणताही अडथळा नाही.",brand:"पहा • ऐका • बोला • समजून घ्या",mission:"कोणाचेही अपंगत्व, भाषा किंवा साक्षरतेची पातळी संवादात अडथळा ठरू नये.",vision:"दृष्टी मोड",vs:"AI च्या मदतीने पहा",hear:"श्रवण मोड",hs:"आवाजाचे मजकुरात रूपांतर करा",comm:"संवाद मोड",cs:"अडथळ्याशिवाय संवाद साधा",health:"आरोग्य सोबती",hls:"तुमचे आरोग्य समजून घ्या",emerg:"आपत्कालीन मदत",es:"लवकर मदत मिळवा",back:"मागे",lang:"भाषा"},
+ta:{tag:"ஒரே தளம். ஒவ்வொரு திறனுக்கும். தொடர்பில் தடைகள் இல்லை.",brand:"பாருங்கள் • கேளுங்கள் • பேசுங்கள் • புரிந்துகொள்ளுங்கள்",mission:"யாருடைய இயலாமையும், மொழியும், கல்வியறிவு நிலையும் தொடர்புக்குத் தடையாக இருக்கக்கூடாது.",vision:"பார்வை முறை",vs:"AI மூலம் பாருங்கள்",hear:"கேட்கும் முறை",hs:"ஒலிகளை எழுத்தாக மாற்றுங்கள்",comm:"தொடர்பு முறை",cs:"தடையின்றி தொடர்பு கொள்ளுங்கள்",health:"சுகாதாரத் துணை",hls:"உங்கள் உடல்நலத்தைப் புரிந்துகொள்ளுங்கள்",emerg:"அவசர உதவி",es:"விரைவான உதவி பெறுங்கள்",back:"பின்",lang:"மொழி"},
+te:{tag:"ఒకే వేదిక. ప్రతి సామర్థ్యం. కమ్యూనికేషన్‌కు అడ్డంకులు లేవు.",brand:"చూడండి • వినండి • మాట్లాడండి • అర్థం చేసుకోండి",mission:"ఎవరి వైకల్యం, భాష లేదా అక్షరాస్యత స్థాయి కమ్యూనికేషన్‌కు అడ్డంకి కాకూడదు.",vision:"దృష్టి మోడ్",vs:"AIతో చూడండి",hear:"వినికిడి మోడ్",hs:"శబ్దాలను అక్షరాల్లోకి మార్చండి",comm:"సంభాషణ మోడ్",cs:"అడ్డంకులు లేకుండా మాట్లాడండి",health:"ఆరోగ్య సహాయకుడు",hls:"మీ ఆరోగ్యాన్ని అర్థం చేసుకోండి",emerg:"అత్యవసర సహాయం",es:"త్వరగా సహాయం పొందండి",back:"వెనుకకు",lang:"భాష"},
+gu:{tag:"એક પ્લેટફોર્મ. દરેક ક્ષમતા. સંવાદમાં કોઈ અવરોધ નહીં.",brand:"જુઓ • સાંભળો • બોલો • સમજો",mission:"કોઈની વિકલાંગતા, ભાષા કે સાક્ષરતાનું સ્તર સંવાદમાં અવરોધ ન બને.",vision:"દૃષ્ટિ મોડ",vs:"AI વડે જુઓ",hear:"શ્રવણ મોડ",hs:"અવાજને લખાણમાં ફેરવો",comm:"સંવાદ મોડ",cs:"અવરોધ વિના વાત કરો",health:"આરોગ્ય સાથી",hls:"તમારું સ્વાસ્થ્ય સમજો",emerg:"કટોકટી મદદ",es:"ઝડપથી મદદ મેળવો",back:"પાછળ",lang:"ભાષા"},
+pa:{tag:"ਇੱਕ ਪਲੇਟਫਾਰਮ। ਹਰ ਯੋਗਤਾ। ਸੰਚਾਰ ਵਿੱਚ ਕੋਈ ਰੁਕਾਵਟ ਨਹੀਂ।",brand:"ਵੇਖੋ • ਸੁਣੋ • ਬੋਲੋ • ਸਮਝੋ",mission:"ਕਿਸੇ ਦੀ ਅਪੰਗਤਾ, ਭਾਸ਼ਾ ਜਾਂ ਸਾਖਰਤਾ ਦਾ ਪੱਧਰ ਸੰਚਾਰ ਵਿੱਚ ਰੁਕਾਵਟ ਨਹੀਂ ਬਣਨਾ ਚਾਹੀਦਾ।",vision:"ਦ੍ਰਿਸ਼ਟੀ ਮੋਡ",vs:"AI ਨਾਲ ਵੇਖੋ",hear:"ਸੁਣਨ ਮੋਡ",hs:"ਆਵਾਜ਼ ਨੂੰ ਲਿਖਤ ਵਿੱਚ ਬਦਲੋ",comm:"ਗੱਲਬਾਤ ਮੋਡ",cs:"ਬਿਨਾਂ ਰੁਕਾਵਟ ਗੱਲ ਕਰੋ",health:"ਸਿਹਤ ਸਾਥੀ",hls:"ਆਪਣੀ ਸਿਹਤ ਨੂੰ ਸਮਝੋ",emerg:"ਐਮਰਜੈਂਸੀ ਮਦਦ",es:"ਜਲਦੀ ਮਦਦ ਲਵੋ",back:"ਪਿੱਛੇ",lang:"ਭਾਸ਼ਾ"},
+kn:{tag:"ಒಂದೇ ವೇದಿಕೆ. ಪ್ರತಿ ಸಾಮರ್ಥ್ಯ. ಸಂವಹನಕ್ಕೆ ಯಾವುದೇ ಅಡ್ಡಿ ಇಲ್ಲ.",brand:"ನೋಡಿ • ಕೇಳಿ • ಮಾತನಾಡಿ • ಅರ್ಥಮಾಡಿಕೊಳ್ಳಿ",mission:"ಯಾರ ಅಂಗವೈಕಲ್ಯ, ಭಾಷೆ ಅಥವಾ ಸಾಕ್ಷರತೆಯ ಮಟ್ಟವೂ ಸಂವಹನಕ್ಕೆ ಅಡ್ಡಿಯಾಗಬಾರದು.",vision:"ದೃಷ್ಟಿ ಮೋಡ್",vs:"AI ಮೂಲಕ ನೋಡಿ",hear:"ಶ್ರವಣ ಮೋಡ್",hs:"ಶಬ್ದವನ್ನು ಪಠ್ಯವಾಗಿ ಬದಲಿಸಿ",comm:"ಸಂವಹನ ಮೋಡ್",cs:"ಅಡ್ಡಿಯಿಲ್ಲದೆ ಮಾತನಾಡಿ",health:"ಆರೋಗ್ಯ ಸಂಗಾತಿ",hls:"ನಿಮ್ಮ ಆರೋಗ್ಯವನ್ನು ಅರ್ಥಮಾಡಿಕೊಳ್ಳಿ",emerg:"ತುರ್ತು ಸಹಾಯ",es:"ತ್ವರಿತ ಸಹಾಯ ಪಡೆಯಿರಿ",back:"ಹಿಂದೆ",lang:"ಭಾಷೆ"},
+ml:{tag:"ഒരു പ്ലാറ്റ്ഫോം. എല്ലാ കഴിവുകൾക്കും. ആശയവിനിമയത്തിൽ തടസ്സങ്ങളില്ല.",brand:"കാണൂ • കേൾക്കൂ • സംസാരിക്കൂ • മനസ്സിലാക്കൂ",mission:"ആരുടെയും വൈകല്യമോ ഭാഷയോ സാക്ഷരതാ നിലവാരമോ ആശയവിനിമയത്തിന് തടസ്സമാകരുത്.",vision:"കാഴ്ച മോഡ്",vs:"AI ഉപയോഗിച്ച് കാണൂ",hear:"കേൾവി മോഡ്",hs:"ശബ്ദത്തെ എഴുത്താക്കി മാറ്റൂ",comm:"ആശയവിനിമയ മോഡ്",cs:"തടസ്സമില്ലാതെ സംസാരിക്കൂ",health:"ആരോഗ്യ സഹായി",hls:"നിങ്ങളുടെ ആരോഗ്യം മനസ്സിലാക്കൂ",emerg:"അടിയന്തര സഹായം",es:"വേഗത്തിൽ സഹായം നേടൂ",back:"പിന്നോട്ട്",lang:"ഭാഷ"}};
+const PH={en:["I need help","Please call my family","I cannot hear. Please write it down.","Please speak slowly","I need water","Where is the toilet?"],
+hi:["मुझे मदद चाहिए","कृपया मेरे परिवार को फ़ोन करें","मुझे सुनाई नहीं देता। कृपया लिखकर बताएँ।","कृपया धीरे बोलें","मुझे पानी चाहिए","शौचालय कहाँ है?"],
+bn:["আমার সাহায্য দরকার","দয়া করে আমার পরিবারকে ফোন করুন","আমি শুনতে পাই না। দয়া করে লিখে দিন।","দয়া করে ধীরে বলুন","আমার জল দরকার","শৌচালয় কোথায়?"],
+mr:["मला मदत हवी आहे","कृपया माझ्या कुटुंबाला फोन करा","मला ऐकू येत नाही. कृपया लिहून सांगा.","कृपया हळू बोला","मला पाणी हवे आहे","स्वच्छतागृह कुठे आहे?"],
+ta:["எனக்கு உதவி தேவை","தயவுசெய்து என் குடும்பத்தினரை அழையுங்கள்","எனக்குக் கேட்காது. தயவுசெய்து எழுதிக் காட்டுங்கள்.","தயவுசெய்து மெதுவாகப் பேசுங்கள்","எனக்குத் தண்ணீர் வேண்டும்","கழிப்பறை எங்கே?"],
+te:["నాకు సహాయం కావాలి","దయచేసి నా కుటుంబానికి ఫోన్ చేయండి","నాకు వినిపించదు. దయచేసి రాసి చూపించండి.","దయచేసి నెమ్మదిగా మాట్లాడండి","నాకు నీళ్లు కావాలి","టాయిలెట్ ఎక్కడ ఉంది?"],
+gu:["મને મદદ જોઈએ છે","કૃપા કરીને મારા પરિવારને ફોન કરો","મને સંભળાતું નથી. કૃપા કરીને લખીને જણાવો.","કૃપા કરીને ધીમે બોલો","મને પાણી જોઈએ છે","શૌચાલય ક્યાં છે?"],
+pa:["ਮੈਨੂੰ ਮਦਦ ਚਾਹੀਦੀ ਹੈ","ਕਿਰਪਾ ਕਰਕੇ ਮੇਰੇ ਪਰਿਵਾਰ ਨੂੰ ਫ਼ੋਨ ਕਰੋ","ਮੈਨੂੰ ਸੁਣਾਈ ਨਹੀਂ ਦਿੰਦਾ। ਕਿਰਪਾ ਕਰਕੇ ਲਿਖ ਕੇ ਦੱਸੋ।","ਕਿਰਪਾ ਕਰਕੇ ਹੌਲੀ ਬੋਲੋ","ਮੈਨੂੰ ਪਾਣੀ ਚਾਹੀਦਾ ਹੈ","ਪਖਾਨਾ ਕਿੱਥੇ ਹੈ?"],
+kn:["ನನಗೆ ಸಹಾಯ ಬೇಕು","ದಯವಿಟ್ಟು ನನ್ನ ಕುಟುಂಬಕ್ಕೆ ಕರೆ ಮಾಡಿ","ನನಗೆ ಕೇಳಿಸುವುದಿಲ್ಲ. ದಯವಿಟ್ಟು ಬರೆದು ತೋರಿಸಿ.","ದಯವಿಟ್ಟು ನಿಧಾನವಾಗಿ ಮಾತನಾಡಿ","ನನಗೆ ನೀರು ಬೇಕು","ಶೌಚಾಲಯ ಎಲ್ಲಿದೆ?"],
+ml:["എനിക്ക് സഹായം വേണം","ദയവായി എന്റെ കുടുംബത്തെ വിളിക്കൂ","എനിക്ക് കേൾക്കാൻ കഴിയില്ല. ദയവായി എഴുതിക്കാണിക്കൂ.","ദയവായി പതുക്കെ സംസാരിക്കൂ","എനിക്ക് വെള്ളം വേണം","ശൗചാലയം എവിടെയാണ്?"]};
+const AAC=[["💧","water","पानी"],["🍚","food","खाना"],["🚻","toilet","शौचालय"],["🤕","pain","दर्द"],["🆘","help","मदद"],["💊","medicine","दवा"],["👨‍👩‍👧","family","परिवार"],["🙏","thank you","धन्यवाद"]];
+const DZ={
+diabetes:["Diabetes","Blood sugar stays too high because the body makes too little insulin or cannot use it well. Common signs: thirst, frequent urination, tiredness, slow-healing wounds.","Get tested if you have these signs or risk factors such as family history or being overweight. Treatment needs regular follow-up.","Confusion, vomiting, fast breathing or fruity-smelling breath need emergency care.","Diet, exercise, tablets and insulin have strong trial evidence for controlling sugar and preventing complications.","Yoga and diet changes may help as support. Evidence for herbs is limited or mixed, and herbs can change blood sugar or interact with medicines.","No reliable evidence that it controls blood sugar. Do not replace medicines with it."],
+bp:["High blood pressure","Pressure in the arteries stays high and silently strains the heart, brain and kidneys. Often there are no symptoms.","Check your pressure regularly. See a doctor if readings are repeatedly 140/90 or higher.","Severe headache, chest pain, trouble speaking or weakness on one side need emergency care.","Lifestyle changes and blood pressure medicines have strong evidence for preventing stroke and heart attack.","Yoga, meditation and less salt may lower pressure a little. Evidence for herbal products is limited.","No reliable evidence that it lowers blood pressure."],
+fever:["Fever","Fever is a sign that the body is fighting something, often an infection. The cause matters more than the number.","See a doctor if fever lasts more than 3 days, or in babies, older adults, pregnancy, or with rash, severe pain or breathlessness. During monsoon, ask about dengue and malaria tests.","Fever with stiff neck, seizure, confusion or trouble breathing, or any fever in a baby under 3 months, needs emergency care.","Finding the cause (tests) and treating it has strong evidence. Antibiotics help only for bacterial infections. Follow a doctor or the label for any dose.","Rest and fluids are supportive. Traditional remedies cannot treat dengue, malaria or typhoid.","No reliable evidence that it treats infections."],
+anemia:["Anemia","Hemoglobin is low, so the blood carries less oxygen. Signs: tiredness, pale skin, breathlessness, dizziness.","Get a blood test to find the cause (often low iron, but not always) before starting supplements.","Fainting, chest pain or severe breathlessness need emergency care.","Iron, B12 or folate treatment once the cause is known has strong evidence. Severe cases may need a transfusion.","Iron-rich foods such as greens and jaggery help alongside treatment. Quality of some preparations varies.","No reliable evidence for correcting anemia."],
+asthma:["Asthma","The airways swell and narrow, causing wheeze, cough, chest tightness and breathlessness.","See a doctor for repeated cough or wheeze, especially at night. Inhaler technique matters.","Severe breathlessness, blue lips or no relief from the reliever inhaler need emergency care.","Reliever and controller inhalers have strong evidence and prevent attacks.","Breathing exercises and yoga may add comfort. Herbs have limited evidence and should not replace inhalers.","No reliable evidence that it controls asthma."],
+tb:["Tuberculosis (TB)","A bacterial infection, usually of the lungs, that spreads through the air. Signs: cough for over 2 weeks, weight loss, night sweats, fever.","A cough of 2 weeks or more needs a TB test. Testing and treatment are free at government health centres in India.","Coughing blood or severe breathlessness need emergency care.","A full course of antibiotics, usually 6 months, cures most TB. Stopping early is dangerous and can cause resistant TB.","No herbal or Ayurvedic treatment has been shown to cure TB. Good food helps recovery as support.","No reliable evidence that it cures TB. Delay lets the infection spread."]};
+const AW={bn:["জল","খাবার","শৌচালয়","ব্যথা","সাহায্য","ওষুধ","পরিবার","ধন্যবাদ"],mr:["पाणी","जेवण","स्वच्छतागृह","वेदना","मदत","औषध","कुटुंब","धन्यवाद"],ta:["தண்ணீர்","உணவு","கழிப்பறை","வலி","உதவி","மருந்து","குடும்பம்","நன்றி"],te:["నీళ్లు","ఆహారం","టాయిలెట్","నొప్పి","సహాయం","మందు","కుటుంబం","ధన్యవాదాలు"],gu:["પાણી","ખોરાક","શૌચાલય","દુખાવો","મદદ","દવા","પરિવાર","આભાર"],pa:["ਪਾਣੀ","ਖਾਣਾ","ਪਖਾਨਾ","ਦਰਦ","ਮਦਦ","ਦਵਾਈ","ਪਰਿਵਾਰ","ਧੰਨਵਾਦ"],kn:["ನೀರು","ಆಹಾರ","ಶೌಚಾಲಯ","ನೋವು","ಸಹಾಯ","ಔಷಧಿ","ಕುಟುಂಬ","ಧನ್ಯವಾದ"],ml:["വെള്ളം","ഭക്ഷണം","ശൗചാലയം","വേദന","സഹായം","മരുന്ന്","കുടുംബം","നന്ദി"]};
+const aw=i=>st.lang==="en"?AAC[i][1]:st.lang==="hi"?AAC[i][2]:((AW[st.lang]||[])[i]||AAC[i][1]);
+const LC={en:"en-IN",hi:"hi-IN",bn:"bn-IN",mr:"mr-IN",ta:"ta-IN",te:"te-IN",gu:"gu-IN",pa:"pa-IN",kn:"kn-IN",ml:"ml-IN"};
+const LN={en:"English",hi:"Hindi (Devanagari script)",bn:"Bengali (Bengali script)",mr:"Marathi (Devanagari script)",ta:"Tamil (Tamil script)",te:"Telugu (Telugu script)",gu:"Gujarati (Gujarati script)",pa:"Punjabi (Gurmukhi script)",kn:"Kannada (Kannada script)",ml:"Malayalam (Malayalam script)"};
+const LS={en:"English",hi:"हिन्दी",bn:"বাংলা",mr:"मराठी",ta:"தமிழ்",te:"తెలుగు",gu:"ગુજરાતી",pa:"ਪੰਜਾਬੀ",kn:"ಕನ್ನಡ",ml:"മലയാളം"};
+const SQ=["Is this urgent, or can I wait and get a second opinion?","What are the other options, including not operating?","What are the risks and the chance it works?","How long is the recovery and when can I work again?","What will it cost and is it covered by insurance or a government scheme?","What should I do before and after, and which signs mean I must call you?"];
+const st={v:"home",lang:"en",c:"diabetes",sz:1,th:"auto",cb:0};
+let rec=null,listening=false,stream=null,vr=null,vm=false,pause=false,lastSp="",spE=0;
+const $=id=>document.getElementById(id);
+const t=k=>(T[st.lang][k]||T.en[k]||k);
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const sv=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+const ld=k=>{try{return JSON.parse(localStorage.getItem(k))||{}}catch(e){return {}}};
+function speak(x,l,cb){if(!window.speechSynthesis){if(cb)cb();return alert("Speech output is not supported in this browser.")}speechSynthesis.cancel();lastSp=String(x).toLowerCase().replace(/[^\p{L}\p{N} ]/gu," ").replace(/\s+/g," ").trim();const u=new SpeechSynthesisUtterance(x);u.lang=l||LC[st.lang]||"en-IN";u.onend=u.onerror=()=>{spE=Date.now();if(cb)cb()};speechSynthesis.speak(u)}
+function bar(){return `<div class="bar">${st.v!=="home"?`<button data-a="go" data-v="home">← ${t("back")}</button>`:""}<span class="sp"></span><button data-a="vc" aria-pressed="${vm?"true":"false"}">🎙️ Voice commands</button><button data-a="cb" aria-pressed="${st.cb?"true":"false"}">🎨 Color-blind</button><button data-a="sz" data-d="-0.1" aria-label="Smaller text">A−</button><button data-a="sz" data-d="0.1" aria-label="Larger text">A+</button></div>`}
+const V={
+home(){return `<h1>Vision AI</h1><p class="tag">${t("tag")}</p><p><b>${t("brand")}</b></p><p class="mut">${t("mission")}</p><div class="row"><button class="p" data-a="vc" aria-pressed="${vm?"true":"false"}">🎙️ Voice commands</button><button data-a="wel">🔊 Welcome</button></div>
+<div class="grid">
+<button class="mode m1" data-a="go" data-v="vision"><i>👁️</i>${t("vision")}<span>${t("vs")}</span></button>
+<button class="mode m2" data-a="go" data-v="hearing"><i>👂</i>${t("hear")}<span>${t("hs")}</span></button>
+<button class="mode m3" data-a="go" data-v="comm"><i>💬</i>${t("comm")}<span>${t("cs")}</span></button>
+<button class="mode m4" data-a="go" data-v="health"><i>⚕️</i>${t("health")}<span>${t("hls")}</span></button></div>
+<div class="box warn"><b>About this demo.</b> Live captions, speech output, communication boards, health information and the emergency card work in your browser. Photo description, text reading and photo questions use AI and may make mistakes. Sound alerts, currency recognition and prescription scanning are not in this version.</div>`},
+vision(){return `<h2>👁️ ${t("vision")}</h2><p class="mut">${t("vs")}</p>
+<video id="vid" playsinline muted hidden></video><canvas id="cv" hidden></canvas>
+<div class="row"><button class="p" data-a="cam">Start camera</button><button data-a="snap">Capture photo</button></div>
+<div id="vmsg" class="box" aria-live="polite">Start the camera, then capture a photo.</div>
+<div class="row"><button class="p" data-a="ai" data-m="desc">🖼️ Describe scene</button><button class="p" data-a="ai" data-m="txt">📄 Read text</button></div>
+<label for="vq">Ask a question about the photo</label><input id="vq" placeholder="For example: What is on the table?"><div class="row"><button data-a="ai" data-m="ask">❓ Ask</button></div>
+<p class="mut">The AI can make mistakes. Check important details such as medicine names, dates and amounts with another person or source.</p>
+<h3>Read text aloud</h3><textarea id="vt" rows="4" placeholder="Type or paste text here"></textarea>
+<div class="row"><button class="p" data-a="readvt">🔊 Read aloud</button></div>
+<div class="box urgent"><b>Important.</b> Descriptions are assistive only. Never rely on this app for obstacle detection or safe navigation, and it does not replace a white cane or a guide.</div>`},
+hearing(){return `<h2>👂 ${t("hear")}</h2><p class="mut">${t("hs")}</p>
+<div class="row"><button class="p" data-a="rec">${listening?"Stop captions":"Start captions"}</button><button data-a="clr">Clear</button></div>
+<div id="capt" class="cap" aria-live="polite">${listening?"Listening…":"Captions will appear here."}</div>
+<div class="box warn">Captions use your browser’s speech recognition in the language chosen above and may make mistakes. Sound alerts for doorbells, alarms and sirens are not included in this version.</div>`},
+comm(){const p=PH[st.lang].map((x,i)=>`<button data-a="ph" data-i="${i}">${esc(x)}</button>`).join("");
+const a=AAC.map((x,i)=>`<button data-a="aac" data-i="${i}"><i>${x[0]}</i>${aw(i)}</button>`).join("");
+return `<h2>💬 ${t("comm")}</h2><p class="mut">${t("cs")}</p>
+<div class="row"><button data-a="txt">⌨️ Text mode</button></div><label for="msg">Type a message</label><textarea id="msg" rows="3"></textarea>
+<div class="row"><button class="p" data-a="say">🔊 Speak</button><button data-a="cm">Clear</button></div>
+<h3>Quick phrases</h3><div class="row chips">${p}</div>
+<h3>Picture board</h3><div class="aac">${a}</div><h3>Translate</h3><div class="row"><button class="p" data-a="tl">🌐 Translate</button></div><label for="tin">Text to translate</label><textarea id="tin" rows="3"></textarea><div class="row"><button data-a="mic">🎤 Speak</button><select id="tk" aria-label="Translate into">${Object.keys(LS).map(k=>`<option value="${k}"${k===(st.lang==="en"?"hi":"en")?" selected":""}>${LS[k]}</option>`).join("")}</select><button class="p" data-a="tr">Translate now</button></div><div id="tout" class="box" aria-live="polite"></div>`},
+health(){const d=DZ[st.c];const o=Object.keys(DZ).map(k=>`<option value="${k}"${k===st.c?" selected":""}>${DZ[k][0]}</option>`).join("");
+return `<h2>⚕️ ${t("health")}</h2><p class="mut">${t("hls")}</p>
+<div class="box warn"><b>Educational information only.</b> This is not a diagnosis or a substitute for a qualified doctor. Never start, stop or change a medicine or dose without your doctor. Health content is in English for now. Other languages will be added after doctor review.</div>
+<label for="dz">Choose a condition</label><select id="dz">${o}</select>
+<div class="box"><h3>What it is</h3><p>${d[1]}</p><h3>When to see a doctor</h3><p>${d[2]}</p></div>
+<div class="box urgent"><h3>Emergency signs</h3><p>${d[3]}</p><p class="mut">If this applies, call 112 or go to the nearest hospital now.</p></div>
+<div class="box"><h3>Treatment approaches and the evidence</h3>
+<p><b>Modern medicine (allopathy):</b> ${d[4]}</p><p><b>Ayurveda:</b> ${d[5]}</p><p><b>Homeopathy:</b> ${d[6]}</p>
+<p class="mut">There is no single “better” system for a serious illness. Proven treatment should not be delayed or replaced. Tell your doctor about every herb or remedy you take.</p></div>
+<div class="row"><button class="p" data-a="readdz">🔊 Read aloud</button></div>
+<details class="box"><summary>Before an operation: questions to ask your surgeon</summary><ul>${SQ.map(q=>`<li>${q}</li>`).join("")}</ul><p class="mut">Only your doctor can decide whether you need surgery. A second opinion is a normal and reasonable step.</p></details>`},
+emerg(){const c=ld("card");const f=(id,l,v,ty)=>`<label for="${id}">${l}</label><input id="${id}" type="${ty||"text"}" value="${esc(v)}">`;
+return `<h2>🆘 ${t("emerg")}</h2>
+<div class="row"><a class="btn e" href="tel:112">📞 Call 112</a><button class="p" data-a="loc">📍 Share my location</button></div>
+<div id="lout" class="box" aria-live="polite">Location messages need a saved contact number below and phone signal.</div>
+<h3>Show a message on screen</h3><div class="row"><button data-a="ov" data-m="I am deaf. Please write or gesture.">I am deaf</button><button data-a="ov" data-m="I cannot speak. Please call the number on my card.">I cannot speak</button><button data-a="ov" data-m="I cannot see. Please help me.">I cannot see</button></div>
+<h3>Emergency card</h3><div class="box">${f("f1","Name",c.n)}${f("f2","Blood group",c.b)}${f("f3","Allergies",c.a)}${f("f4","Conditions and medicines",c.m)}${f("f5","Contact name",c.cn)}${f("f6","Contact phone",c.cp,"tel")}
+<div class="row"><button class="p" data-a="sc">Save card on this device</button></div><p class="mut">Saved only in this browser. It is not uploaded anywhere.</p></div>
+<div class="box warn">Messages depend on your network and permissions. This app does not replace emergency services.</div>`}};
+const LOGO='<svg viewBox="0 0 40 40" aria-hidden="true" focusable="false"><rect width="40" height="40" rx="10" fill="var(--ac)"/><path d="M5 20c4-7 9-10 15-10s11 3 15 10c-4 7-9 10-15 10S9 27 5 20z" fill="none" stroke="var(--acf)" stroke-width="2.5"/><circle cx="20" cy="20" r="5" fill="var(--acf)"/></svg>';
+const PN={home:"Home",features:"Features",about:"About",access:"Accessibility",contact:"Contact",privacy:"Privacy Policy",vision:"Vision Mode",hearing:"Hearing Mode",comm:"Communication Mode",health:"Health Companion",emerg:"Emergency Help"};
+function mkHdr(){const N=[["home","Home"],["features","Features"],["about","About"],["access","Accessibility"]];
+const lg=Object.keys(LS).map(k=>`<option value="${k}"${st.lang===k?" selected":""}>${LS[k]}</option>`).join("");
+return `<div class="hd-in"><a class="logo" href="#home" data-a="go" data-v="home" aria-label="VISION AI. Communication Without Barriers. Go to home">${LOGO}<span><b>VISION AI</b><small>Communication Without Barriers.</small></span></a>
+<div class="ctl"><button data-a="th" aria-label="Color theme: ${st.th}. Press to switch between auto, light and dark">${{auto:"🌓 Auto",light:"☀️ Light",dark:"🌙 Dark"}[st.th]}</button><select id="lang" aria-label="${t("lang")}">${lg}</select></div>
+<nav aria-label="Main">${N.map(n=>`<a href="#${n[0]}" data-a="go" data-v="${n[0]}"${st.v===n[0]?' aria-current="page"':""}>${n[1]}</a>`).join("")}</nav></div>`}
+function mkFtr(){const L=[["home","Home"],["about","About Us"],["features","Features"],["access","Accessibility"],["contact","Contact"],["privacy","Privacy Policy"]];
+return `<div class="ft-in"><div><div class="logo">${LOGO}<span><b>VISION AI</b><small>See • Hear • Speak • Understand.</small></span></div></div>
+<nav aria-label="Footer"><ul>${L.map(l=>`<li><a href="#${l[0]}" data-a="go" data-v="${l[0]}">${l[1]}</a></li>`).join("")}</ul></nav>
+<p class="cp">© 2026 Vision AI. All rights reserved.</p></div>`}
+Object.assign(V,{
+features(){return `<h2>Features</h2>
+<div class="box"><h3>👁️ Vision Mode</h3><p>Capture a photo with your camera and hear an AI description, have text read aloud, or ask a question about the photo. Descriptions are assistive only and are not for navigation or obstacle detection.</p></div>
+<div class="box"><h3>👂 Hearing Mode</h3><p>Live captions in large text, using your device’s speech recognition.</p></div>
+<div class="box"><h3>💬 Communication Mode</h3><p>Type or tap to speak, quick phrases, a picture board, and AI translation between 10 languages.</p></div>
+<div class="box"><h3>⚕️ Health Companion</h3><p>Plain-language information on common conditions, an evidence-based comparison of treatment approaches, and questions to ask before surgery. Educational only.</p></div>
+<div class="box"><h3>🆘 Emergency Help</h3><p>Call 112, share your location by SMS, show a message on screen, and keep an emergency card on your device.</p></div>
+<div class="box"><h3>🎙️ Voice commands, 🎨 color-blind mode and dark mode</h3><p>Control the main actions by voice, switch to a color-blind friendly palette, and choose a light or dark theme.</p></div>`},
+about(){return `<h2>About Vision AI</h2>
+<p><b>Communication Without Barriers</b></p>
+<p>Our mission is to ensure that no person’s disability, language or literacy level becomes a barrier to communication.</p>
+<p>Vision AI is an accessibility and inclusion platform that offers different ways to communicate, so each person can choose the method that works best for them: seeing, hearing, speaking or understanding.</p>
+<p class="mut">Vision AI gives assistive information only. It does not replace a doctor, an interpreter, a white cane or emergency services.</p>`},
+access(){return `<h2>Accessibility</h2>
+<p>We want everyone to be able to use Vision AI.</p>
+<h3>What is built in</h3>
+<ul><li>Full keyboard use: Tab to move, Enter or Space to press, and a “Skip to main content” link.</li><li>Screen reader labels, page announcements and clear focus outlines.</li><li>High-contrast light and dark themes, plus a color-blind friendly palette.</li><li>Adjustable text size and large touch targets.</li><li>Voice commands for the main actions and spoken feedback.</li><li>10 languages for the interface and speech.</li></ul>
+<h3>Known limits</h3>
+<ul><li>AI descriptions, text reading and translations can be wrong. Check important details.</li><li>Speech recognition and voices depend on your browser and device.</li><li>Voice commands do not yet cover every action, such as typing into forms.</li><li>This app has not yet been tested with a wide group of assistive technology users.</li></ul>`},
+contact(){return `<h2>Contact</h2><p>Contact details are not available yet.</p>`},
+privacy(){return `<h2>Privacy Policy</h2>
+<p class="mut">This is a plain-language summary of how this app works. Have it reviewed by a legal professional before you rely on it.</p>
+<ul><li><b>No account.</b> You do not sign in, and we do not sell your data.</li><li><b>On your device.</b> Your settings (language, theme, text size) and your emergency card are saved only in this browser. Clear them by editing the card or clearing the site’s data.</li><li><b>Camera and microphone.</b> Used only after you press a button. The app does not save your photos.</li><li><b>AI features.</b> When you use photo description, text reading, photo questions or translation, your photo or text is sent to an AI service to produce the answer.</li><li><b>Speech.</b> Speech recognition and voice output are provided by your browser or device, which may send audio to its own service.</li><li><b>Location.</b> Used only when you press Share my location, and sent through your own SMS app.</li><li><b>Health information.</b> Educational only, and not a substitute for a doctor.</li></ul>`}
+});
+function render(){document.documentElement.style.setProperty("--s",st.sz);document.documentElement.lang=st.lang;if(st.cb)document.documentElement.setAttribute("data-cb","1");else document.documentElement.removeAttribute("data-cb");if(st.th==="auto")document.documentElement.removeAttribute("data-theme");else document.documentElement.setAttribute("data-theme",st.th);$("sost").textContent=t("emerg");$("sosbar").hidden=st.v==="emerg";$("hdr").innerHTML=mkHdr();$("ftr").innerHTML=mkFtr();$("pg").textContent=(PN[st.v]||"")+" page";$("app").innerHTML=bar()+V[st.v]();window.scrollTo(0,0)}
+function stopAll(){if(rec){listening=false;try{rec.stop()}catch(e){}}if(stream){stream.getTracks().forEach(x=>x.stop());stream=null}if(window.speechSynthesis)speechSynthesis.cancel()}
+function startRec(){const R=window.SpeechRecognition||window.webkitSpeechRecognition;if(!R){$("capt").textContent="Speech recognition is not supported in this browser. Try Chrome on Android or desktop.";return}
+rec=new R();rec.lang=LC[st.lang]||"en-IN";rec.continuous=true;rec.interimResults=true;
+rec.onresult=e=>{let s="";for(const r of e.results)s+=r[0].transcript+" ";$("capt").textContent=s;const l=e.results[e.results.length-1];if(l.isFinal&&/stop (captions|caption|listening)/i.test(l[0].transcript)){listening=false;try{rec.stop()}catch(x){}A.upd();vcResume()}};
+rec.onerror=e=>{$("capt").textContent="Captions stopped: "+e.error+". Allow microphone access and try again.";listening=false};
+rec.onend=()=>{if(listening){try{rec.start()}catch(e){}}};
+listening=true;rec.start();$("capt").textContent="Listening…"}
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+function vcResume(){pause=false;if(vm&&vr){try{vr.start()}catch(e){}}}
+function vcStart(){if(!SR){vm=false;speak("Voice commands are not supported in this browser. Try Chrome.","en-IN");return}
+vr=new SR();vr.lang="en-IN";vr.continuous=true;vr.interimResults=false;
+vr.onresult=e=>{if(window.speechSynthesis&&speechSynthesis.speaking)return;const r=e.results[e.results.length-1];if(r.isFinal)cmd(r[0].transcript)};
+vr.onerror=ev=>{if(ev.error==="not-allowed"||ev.error==="service-not-allowed"){vm=false;speak("Microphone access was blocked, so voice commands are off.","en-IN");render()}};
+vr.onend=()=>{if(vm&&!pause){try{vr.start()}catch(e){}}};
+try{vr.start()}catch(e){}}
+function cmd(raw){const t=raw.toLowerCase().replace(/[^\p{L}\p{N} ]/gu," ").replace(/\s+/g," ").trim();
+if(!t||(Date.now()-spE<2500&&t.length>3&&lastSp.includes(t)))return;
+const h=(...w)=>w.some(x=>t.includes(x)),g=v=>A.go({dataset:{v}}),op=h("open","go to","show","switch to"),V=x=>speak(x,"en-IN");let m;
+if(m=t.match(/^(?:say|speak) (.+)/))return speak(m[1]);
+if(h("what can i say","voice commands","list commands"))return V("You can say: open vision, hearing, communication or health. Start camera. Take photo. Describe. Read text. Start captions. Say, followed by a message, to speak it. Tell me about diabetes. Call 112. Share my location. Bigger text. Dark mode. Stop voice. For urgent help, say emergency.");
+if(h("stop voice","voice off","stop listening","turn off voice")){vm=false;try{vr.stop()}catch(e){}V("Voice mode is off.");return render()}
+if(h("call 112","call one one two","call emergency")){V("Calling 112.");setTimeout(()=>{try{location.href="tel:112"}catch(e){}},1500);return}
+if(h("share my location","send my location")){if(st.v!=="emerg")g("emerg");A.loc();return V("Finding your location. When it is found, use the Send SMS button.")}
+if(h("emergency","sos","help me")||t==="help"){g("emerg");return V("Opened the urgent help screen. Say call 112, or share my location.")}
+if(h("start camera","open camera")){if(st.v!=="vision")g("vision");return A.cam()}
+if(h("take photo","take a photo","take a picture","capture")){if(st.v!=="vision")return V("Say open vision first.");return A.snap()}
+if(m=t.match(/^ask (.+)/)){if(st.v!=="vision")return V("Say open vision first.");$("vq").value=m[1];return A.ai({dataset:{m:"ask"}})}
+if(h("describe","in front of me")){if(st.v!=="vision")return V("Say open vision first.");return A.ai({dataset:{m:"desc"}})}
+if(h("read text","read this")){if(st.v!=="vision")return V("Say open vision first.");return A.ai({dataset:{m:"txt"}})}
+if(h("start captions","live captions","start listening")){if(st.v!=="hearing")g("hearing");if(!listening)A.rec();return}
+const DK={diabetes:"diabetes","blood pressure":"bp",hypertension:"bp",fever:"fever",anemia:"anemia",anaemia:"anemia",asthma:"asthma",tuberculosis:"tb"};
+const hit=Object.keys(DK).find(k=>t.includes(k))||(/\btb\b/.test(t)?"tuberculosis":null);
+if(hit&&h("tell me","about","explain","what is","read")){st.c=DK[hit]||"tb";g("health");return A.readdz()}
+if(st.v==="health"&&h("read aloud","read it"))return A.readdz();
+const LM={english:"en",hindi:"hi",bengali:"bn",marathi:"mr",tamil:"ta",telugu:"te",gujarati:"gu",punjabi:"pa",kannada:"kn",malayalam:"ml"};
+if(h("language","switch to","change to")){for(const k in LM)if(t.includes(k)){st.lang=LM[k];render();return V("Language changed to "+k+".")}}
+if(op&&t.includes("vision")){g("vision");return V("Vision mode. Say start camera, then take photo.")}
+if(op&&t.includes("hearing")){g("hearing");return V("Hearing mode. Say start captions.")}
+if(op&&t.includes("communication")){g("comm");return V("Communication mode. Say, followed by your message, to speak it.")}
+if(op&&t.includes("health")){g("health");return V("Health companion. Say tell me about diabetes, or another condition.")}
+if(h("go home","go back","home screen")){g("home");return V("Home screen.")}
+if(h("bigger text","larger text","increase text")){A.sz({dataset:{d:"0.1"}});return V("Text made bigger.")}
+if(h("smaller text","decrease text")){A.sz({dataset:{d:"-0.1"}});return V("Text made smaller.")}
+if(h("dark mode")){st.th="dark";sv("theme",{m:"dark"});render();return V("Dark mode.")}
+if(h("light mode")){st.th="light";sv("theme",{m:"light"});render();return V("Light mode.")}
+if(h("color blind","colour blind"))return A.cb();
+V("Sorry, I did not understand. Say what can I say, to hear the commands.")}
+const A={
+skip(){$("app").focus()},
+go(b){stopAll();st.v=b.dataset.v;render();vcResume()},
+vc(){if(vm){vm=false;pause=false;try{vr.stop()}catch(e){}speak("Voice mode is off.","en-IN");render();return}vm=true;vcStart();if(!vm){render();return}render();speak("Voice mode is enabled. You can speak naturally, and I’ll assist you with what you need.","en-IN")},
+cb(){st.cb=st.cb?0:1;sv("cb",{on:st.cb});render();const m=st.cb?"Color-blind friendly mode enabled. Colors are enhanced for better visibility and distinction.":"Color-blind friendly mode disabled.";const d=document.createElement("div");d.className="box warn";d.setAttribute("role","status");d.textContent=m;$("app").children[0].after(d);speak(m,"en-IN")},
+th(){st.th=st.th==="auto"?"light":st.th==="light"?"dark":"auto";sv("theme",{m:st.th});render();const tb=document.querySelector('#hdr [data-a="th"]');if(tb)tb.focus()},
+sz(b){st.sz=Math.min(1.6,Math.max(.8,st.sz+parseFloat(b.dataset.d)));render()},
+async cam(){try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"environment"}});const v=$("vid");v.srcObject=stream;v.hidden=false;await v.play();$("vmsg").textContent="Camera is on. Press Capture photo.";speak("Camera activated. Please show me what you want me to identify or understand.","en-IN")}catch(e){$("vmsg").textContent="Camera could not start. Allow camera access in your browser settings."}},
+snap(){const v=$("vid");if(!stream||!v.videoWidth){$("vmsg").textContent="Start the camera first.";return}const c=$("cv");c.width=v.videoWidth;c.height=v.videoHeight;c.getContext("2d").drawImage(v,0,0);c.hidden=false;$("vmsg").textContent="Photo captured. Press Describe scene or Read text.";speak("Photo captured.")},
+async ai(b){const c=$("cv"),o=$("vmsg");if(c.hidden){o.textContent="Capture a photo first.";return}
+let sm=null;try{sm=await claude.use("sample")}catch(e){}
+if(!sm){o.textContent="AI is not available here. Open this page in claude.ai to use it.";return}
+o.textContent="Analysing the photo…";
+try{const blob=await new Promise(r=>c.toBlob(r,"image/jpeg",.8));const lg=LN[st.lang]||"English";
+const P={desc:"Describe this scene for a blind person in 3 short, simple sentences. Name visible everyday objects and where they are (left, right, in front). Never say a path is clear or safe. If unsure, say so.",txt:"Read all visible text in this image exactly and in order. If there is none, say there is no readable text. If part is unclear, say so.",ask:"Answer this question about the image briefly and honestly, and say if you are unsure. Question: "+($("vq").value||"What is in front of me?")}[b.dataset.m];
+const r=await sm("Respond only in "+lg+". "+P,{images:[blob],cache:false,modelTier:"quick"});o.textContent=r.text;speak(r.text)}
+catch(e){o.textContent="Could not analyse the photo ("+((e&&e.code)||"error")+"). Try again."}},
+wel(){speak("Hello! Welcome to Vision AI. How can I help you today?","en-IN")},
+txt(){speak("Text mode activated. Type your message here.","en-IN");$("msg").focus()},
+tl(){speak("Translation started. Please speak or enter the text you want to translate.","en-IN");$("tin").focus()},
+mic(){const R=window.SpeechRecognition||window.webkitSpeechRecognition;if(!R){$("tout").textContent="Speech recognition is not supported in this browser. Type the text instead.";return}const r=new R();r.lang=LC[st.lang]||"en-IN";r.onresult=e=>{$("tin").value=e.results[0][0].transcript};r.onerror=()=>{$("tout").textContent="Could not hear you. Allow microphone access and try again."};r.start()},
+async tr(){const x=$("tin").value.trim(),o=$("tout");if(!x){o.textContent="Enter or speak some text first.";return}
+let sm=null;try{sm=await claude.use("sample")}catch(e){}
+if(!sm){o.textContent="Translation needs AI. Open this page in claude.ai to use it.";return}
+const k=$("tk").value;o.textContent="Translating…";
+try{const r=await sm("Translate the following text into "+LN[k]+". Reply with only the translation.\n\n"+x,{cache:false,modelTier:"quick"});o.textContent=r.text;speak(r.text,LC[k])}
+catch(e){o.textContent="Translation failed ("+((e&&e.code)||"error")+"). Try again."}},
+readvt(){const x=$("vt").value.trim();if(x)speak(x)},
+rec(){if(listening){listening=false;try{rec.stop()}catch(e){}A.upd();vcResume();return}pause=true;try{vr&&vr.stop()}catch(e){}speak("Voice mode activated. Please start speaking.","en-IN",()=>{startRec();A.upd()})},
+upd(){const b=document.querySelector('[data-a="rec"]');if(b)b.textContent=listening?"Stop captions":"Start captions"},
+clr(){if($("capt"))$("capt").textContent=listening?"Listening…":"Captions will appear here."},
+ph(b){const x=PH[st.lang][+b.dataset.i];$("msg").value=x;speak(x)},
+aac(b){const x=aw(+b.dataset.i);$("msg").value=($("msg").value+" "+x).trim();speak(x)},
+say(){const x=$("msg").value.trim();if(x)speak(x)},
+cm(){$("msg").value="";$("msg").focus()},
+readdz(){const d=DZ[st.c];speak(d[0]+". "+d[1]+" When to see a doctor. "+d[2]+" Emergency signs. "+d[3]+" Modern medicine. "+d[4]+" Ayurveda. "+d[5]+" Homeopathy. "+d[6]+" This is educational information only. Please consult a qualified doctor.","en-IN")},
+sc(){sv("card",{n:$("f1").value,b:$("f2").value,a:$("f3").value,m:$("f4").value,cn:$("f5").value,cp:$("f6").value});$("lout").textContent="Emergency card saved on this device."},
+loc(){const o=$("lout");if(!navigator.geolocation){o.textContent="Location is not available in this browser.";return}o.textContent="Finding your location…";
+navigator.geolocation.getCurrentPosition(p=>{const u="https://maps.google.com/?q="+p.coords.latitude+","+p.coords.longitude;const ph=(ld("card").cp||"").replace(/[^\d+]/g,"");const m=encodeURIComponent("Emergency! I need help. My location: "+u);
+o.innerHTML=(ph?`<a class="btn p" href="sms:${ph}?body=${m}">Send SMS to saved contact</a>`:"Save a contact phone below to send an SMS.")+`<p>${esc(u)}</p>`},()=>{o.textContent="Location could not be read. Allow location access and try again."},{timeout:10000})},
+ov(b){$("ovl").innerHTML=`<div class="ov" role="alertdialog" aria-label="Emergency message" tabindex="0" data-a="cl">${esc(b.dataset.m)}</div>`;$("ovl").firstChild.focus()},
+cl(){$("ovl").innerHTML=""}};
+document.addEventListener("click",e=>{const b=e.target.closest("[data-a]");if(b&&A[b.dataset.a]){if(b.tagName==="A")e.preventDefault();A[b.dataset.a](b)}});
+document.addEventListener("change",e=>{if(e.target.id==="lang"){st.lang=e.target.value;render();$("lang").focus()}if(e.target.id==="dz"){st.c=e.target.value;render()}});
+st.th=ld("theme").m||"auto";st.cb=ld("cb").on?1:0;
+render();
+</script>
+</body>
+</html>
